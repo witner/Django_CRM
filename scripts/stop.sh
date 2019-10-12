@@ -14,4 +14,22 @@ PROJECT_DIR=${BASE_DIR}${PROJECT_NAME}
 cd ${PROJECT_DIR}
 
 # 停止python web容器uwsgi
-`uwsgi --stop ./scripts/uwsgi.pid`
+if [[ -f scripts/uwsgi.pid ]]
+then
+  `uwsgi --stop ./scripts/uwsgi.pid`
+else
+  PID=`/usr/sbin/lsof -i:5500|grep -v PID|awk '{print $2}'`
+  if [[ "x${PID}" == "x" ]]
+  then
+    echo "没有找到运行的进程，不需要结束"
+  else
+    echo "当前进程PID：${PID},结束当前进程"
+    kill -9 ${PID}
+  fi
+fi
+
+
+
+
+
+
