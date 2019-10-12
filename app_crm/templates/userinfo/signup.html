@@ -1,0 +1,184 @@
+<!-- 继承base.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %} 注册|Signup {% endblock %}
+
+{% block basehtml-head-link %}
+    <style>
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #ffffff;
+        }
+
+        .signup-box-header{
+            margin-bottom: 20px;
+        }
+
+        .signup-box-header>span{
+            display: block;
+            text-align: center;
+            font-size: 3em;
+            padding: 0 auto;
+        }
+
+
+        .signup-box-body .err_msg{
+            line-height: 100%;
+            font-size: 1em;
+            color: red;
+            padding: 0.7em 0 0 0;
+        }
+    </style>
+{% endblock %}
+
+{% block basehtml-body %}
+    <div class="container-fluid">
+        <div class="row signup-box">
+            <div class="col-md-12 signup-box-header">
+                <span class="login-title">ManageTool_D&C</span>
+            </div>
+            <div class="col-md-6 col-md-offset-3 signup-box-modal">
+                <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h4 class="modal-title">注册结果</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p></p>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-default" href="{% url 'stark:app_crm_userinfo_login' %}" role="button">去登录</a>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
+            <div class="col-md-6 col-md-offset-3 signup-box-body">
+                <form action="{% url 'stark:app_crm_userinfo_signup' %}" method="post" class="form-horizontal" id="signup_form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username" class="col-md-3 control-label">用户名:</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="username" placeholder="请输入需要注册的系统账号" name="username" required autofocus>
+                        </div>
+                        <span class="err_msg col-md-3">{{ response.data.username.0 }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="telephone" class="col-md-3 control-label">手机号:</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="telephone" placeholder="请输入需要注册的手机号" name="telephone" required>
+                        </div>
+                        <span class="err_msg col-md-3">{{ response.data.telephone.0 }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-md-3 control-label">邮箱:</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="email" placeholder="请输入需要注册的邮箱" name="email" required>
+                        </div>
+                        <span class="err_msg col-md-3">{{ response.data.email.0 }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-md-3 control-label">密码:</label>
+                        <div class="col-md-6">
+                            <input type="password" class="form-control" id="password" placeholder="请输入密码" name="password" required>
+                        </div>
+                        <span class="err_msg col-md-3">{{ response.data.password.0 }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password" class="col-md-3 control-label">确认密码:</label>
+                        <div class="col-md-6">
+                            <input type="password" class="form-control" id="confirm_password" placeholder="请输入确认密码" name="confirm_password" required>
+                        </div>
+                        <span class="err_msg col-md-3">{{ response.data.confirm_password.0 }}</span>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-md-offset-3">
+                            <button class="btn btn-lg btn-primary btn-block" id="signup-btn" type="button">注册</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+{% block basehtml-body-js %}
+    <script>
+        $(function () {
+            $.MsgBox = {
+                Alert: function (title, msg) {
+                    GenerateHal('')
+                }
+            }
+
+            // 注册点击
+            $('#signup-btn').click(function () {
+                var form_data = $('#signup_form').serializeArray();
+                var filed_is_null = false;
+                // var request_data = new FormData();
+                var request_data = {};
+                $.each(form_data, function (index, data) {
+                    // console.log(index, data);
+                    var name = '#' + data['name'];
+                    if (data['value'].length === 0){
+                        // 表示某个值输入为空
+                        $(name).parent().siblings('span').text('该字段不能为空');
+                        filed_is_null = true;
+                    }else{
+                        // request_data.append(data.name, data.value);
+                        $(name).parent().siblings('span').text('');
+                        request_data[data.name] = data.value;
+                    }
+                });
+                if (filed_is_null === true){
+                    return false;
+                }else {
+                    $.ajax({
+                        url: '{% url "stark:app_crm_userinfo_signup" %}',
+                        type: 'POST',
+                        // contentType: false,
+                        // processData: false,
+                        data: request_data,
+                        success: function (response_data) {
+                            // console.log('ajax')
+                            // var json_data = JSON.parse(data);
+                            if (response_data['code'] === '200'){
+
+                                $('#myModal').modal('show').on('shown.bs.modal', function () {
+                                    var p_text = '你的账号' + response_data.data['username'] + '注册成功！点去登录按钮，将跳转登录页面';
+                                    $('.modal-body>p').text(p_text);
+                                });
+                                console.log('登录成功');
+                                // $('#myModal').modal();
+                                // location.href = 'APP_User/login/';
+                            }else{
+                                console.log(response_data);
+                                // 清空错误信息
+                                $('.err_msg').text();
+                                // 设置错误信息
+                                $.each(form_data, function (index, data) {
+                                    var name = data.name;
+                                    var str_text = response_data.data[name];
+                                    var ele_name = '#' + data['name'];
+                                    $(ele_name).parent().siblings('span').text(str_text);
+                                    // $(ele_name).parent().addClass('has-error');
+                                });
+                            }
+                        }
+                    });
+                }
+
+            })
+            // console.log($('#signup_form').serializeArray())
+        })
+
+    </script>
+{% endblock %}

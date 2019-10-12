@@ -1,0 +1,201 @@
+<!-- 继承base.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %} 登录|Login {% endblock %}
+
+{% block basehtml-head-link %}
+    <style>
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #ffffff;
+        }
+        .login-box-header{
+            margin-bottom: 20px;
+        }
+        .login-box-header>span{
+            display: block;
+            text-align: center;
+            font-size: 3em;
+            padding: 0 auto;
+        }
+
+        .login-box-foot>span{
+            display: block;
+            float: right;
+        }
+
+        .login-type label{
+            font-size: 1.5em;
+            width: 100%;
+            text-align: center;
+        }
+        .login-type label:before{
+            content: "----";
+        }
+        .login-type label:after{
+            content: "----";
+        }
+
+        /*第三方登录图片样式设置*/
+        .login-type ul{
+            display: table;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .login-type li{
+            display: block;
+            float: left;
+            padding: 0 auto;
+            margin-right: 1.5em;
+        }
+        .login-type li>a>i{
+            display: block;
+            font-size: 3em;
+        }
+    </style>
+{% endblock %}
+
+
+{% block basehtml-body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4 login-box">
+                <div class="form-group login-box-header">
+                    <span class="login-title">Django_CRM</span>
+                </div>
+                <div class="form-group login-box-body">
+                    <form class="login-form">
+                        {% csrf_token %}
+                        <div class="form-group input-group-lg">
+                            <input type="text" id="username" class="form-control login-type-input" placeholder="请输入邮箱地址、手机号或系统账号" name="username"  autocomplete="off" required autofocus>
+                            <span class="label label-danger username_err_msg err_msg"></span>
+                        </div>
+                        <div class="form-group input-group-lg">
+                            <input type="password" id="password" class="form-control" placeholder="请输入密码" name="password" required>
+                            <span class="label label-danger password_err_msg err_msg"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-6">
+                                <div class="form-group input-group-lg">
+                                    <input type="text" id="pic_code" class="form-control" placeholder="请输入验证码" autocomplete="off"required>
+                                    <span class="label label-danger pic_code_err_msg err_msg"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-6">
+                                <div class="form-group input-group-lg">
+                                    <img id="img_pic_code" class="img-thumbnail">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-lg btn-primary btn-block" id="login-btn" type="button">登录</button>
+                    </form>
+                </div>
+
+                <div class="form-group login-box-foot">
+                    <span>没有账号, <a href="{% url 'stark:app_crm_userinfo_signup' %}">去注册></a></span>
+                    <a href="#" class="forget-pwd">忘记密码？</a>
+                </div>
+                <div class="form-group login-type">
+                    <div class="form-group">
+                        <label>第三方账号登录</label>
+                    </div>
+                    <div class="form-group">
+                        <ul class="clearfix">
+                            <li class="clearfix">
+                                <a href="#" title="QQ登录"><i class="iconfont">&#xe65c;</i></a>
+                            </li>
+                            <li class="clearfix">
+                                <a href="#" title="微信登录"><i class="iconfont">&#xe601;</i></a>
+                            </li>
+                            <li class="clearfix">
+                                <a href="#" title="微博登录"><i class="iconfont">&#xe600;</i></a>
+                            </li>
+                            <li class="clearfix">
+                                <a href="#" title="更多方式"><i class="iconfont">&#xe8a6;</i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+{% block basehtml-body-js %}
+    <script>
+        $(function () {
+            var ele_input = $('#pic_code');
+            var width = ele_input.innerWidth();
+            var height = ele_input.innerHeight();
+            // console.log(width, height);
+            var url = '/stark/app_crm/userinfo/get_pic_code/' + parseInt(width) + '/' + parseInt(height - 8) + '/' + 30 + '/';
+            // console.log(url);
+            $('#img_pic_code').attr('src', url);
+
+            // 图形验证码刷新
+            $('#img_pic_code').click(function () {
+                $(this)[0].src += '?';
+            });
+
+            // 登录ajax请求
+            var login_url_ajax = '{% url "stark:app_crm_userinfo_login" %}';
+            $('#login-btn').click(function () {
+                // 第一步重置错误信息
+                $('.err_msg').text('');
+
+
+                // 第二步检查输入，是否存在为空的情况
+                var input_username = $('#username').val();
+                var input_password = $('#password').val();
+                var input_pic_code = $('#pic_code').val();
+
+                if (input_username.length === 0){
+                    $('.username_err_msg').text('输入邮箱地址、手机号或系统账号不能为空');
+                }
+                if (input_password.length === 0){
+                    $('.password_err_msg').text('输入密码不能为空');
+                }
+                if (input_pic_code.length === 0){
+                    $('.pic_code_err_msg').text('输入验证码不能为空');
+                }
+
+                if (input_username.length > 0 && input_password.length >0 && input_pic_code.length > 0){
+                    $.ajax({
+                        url: login_url_ajax,
+                        type: 'POST',
+                        data: {
+                            username: $('#username').val(),
+                            password: $('#password').val(),
+                            pic_code: $('#pic_code').val(),
+                            csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+                        },
+                        success: function (response_data) {
+                            // console.log('ajax')
+                            // var json_data = JSON.parse(data);
+                            if (response_data['code'] === '200'){
+                                console.log('登录成功');
+                                location.href = '/index/';
+                            }else{
+                                console.log(response_data)
+                                var field = response_data['data']['field'];
+                                var msg = response_data['msg'];
+                                if(field === 'username'){
+                                    $('.username_err_msg').text(msg);
+                                }else if (field === 'pic_code'){
+                                    $('.pic_code_err_msg').text(msg);
+                                }
+                            }
+                            // location.href = url_href;                // 操作成功重定向
+                        }
+                    });
+                }
+
+            });
+
+
+        })
+    </script>
+{% endblock %}

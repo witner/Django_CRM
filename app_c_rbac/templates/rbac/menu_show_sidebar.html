@@ -1,0 +1,22 @@
+<!-- 菜单展示目录组件 -->
+{% for menu in menu_node %}
+    {% if forloop.first %}
+        <li class="active treeview menu-open">
+    {% else %}
+        <li class="treeview">
+    {% endif %}
+            <a href="{{ menu.url }}">
+                <i class="{{ menu.icon }}"></i> <span>{{ menu.text }}</span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                {% for foo in menu.children %}
+                    <li><a href="{{ foo.url }}"><i class="{{ foo.icon }}"></i> {{ foo.text }} </a></li>
+                {% endfor %}
+            </ul>
+        </li>
+{% endfor %}
+
+

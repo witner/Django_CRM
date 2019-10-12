@@ -1,0 +1,52 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- meta相关设置 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="DX_Manage：冬冬的管理工具">
+    <meta name="author" content="Y_winter_w">
+    <!-- 扩展meta -->
+    {% block basehtml-head-meta %} {% endblock %}
+
+    <!-- title相关设置 -->
+    <title>
+        {% block title %} {% endblock %}
+    </title>
+
+    <!-- css link相关设置 -->
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.3.7-dist/css/bootstrap.min.css' %}">
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css' %}">
+    <link rel="stylesheet" href="{% static '/font/font.css' %}">
+    <!-- basehtml-head-link 用于写自己独有的前置css等-->
+    {% block basehtml-head-link %} {% endblock %}
+
+    <!-- javascript 相关引入 -->
+    <script src="{% static 'plugins/jquery/jquery-3.3.1.js' %}"></script>
+    <script src="{% static 'plugins/bootstrap-3.3.7-dist/js/ie-emulation-modes-warning.js' %}"></script>
+
+    <!-- basehtml-head-script 用于写自己独有的前置置JavaScript脚本-->
+    {% block basehtml-head-script %} {% endblock %}
+
+</head>
+<body>
+<!-- basehtml-body 用于写自己独有的html内容-->
+{% block basehtml-body %} {% endblock %}
+
+<!-- basehtml-body-js 用于写自己独有的后置JavaScript脚本-->
+<script src="{% static 'plugins/bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+<!-- Bootstrap-datetimepicker JavaScript================================================== -->
+<script src="{% static 'plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js' %}"></script>
+
+
+
+{% block basehtml-body-js %} {% endblock %}
+</body>
+</html>

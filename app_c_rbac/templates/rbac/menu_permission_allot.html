@@ -1,0 +1,70 @@
+{% extends 'theme/index.html' %}
+{% load staticfiles %}
+<!-- 菜单权限分配页面 -->
+
+{% block index-body-content-wrapper %}
+    <div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">用户菜单权限分配</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="panel panel-default">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading">用户列表</div>
+                            <div class="panel-body">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Username</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>Mark</td>
+                                        <td>Otto</td>
+                                        <td>@mdo</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>Jacob</td>
+                                        <td>Thornton</td>
+                                        <td>@fat</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Table -->
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading">菜单列表</div>
+                            <div class="panel-body">
+                                <div id="jstree_div"></div>
+                            </div>
+                            <!-- Table -->
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <button id="menu_commit" class="btn btn-default btn-link">确认</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Table -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block index-body-js %}
+    <script src="{% static 'rbac/js/menu_permission_allot.js' %}"></script>
+{% endblock %}
+
