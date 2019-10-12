@@ -8,9 +8,12 @@ from app_c_rbac.models import *
 
 def index(request):
     user_info = request.session.get('user_info')
-    user_obj = UserInfo.objects.filter(id=user_info['id']).first()
-    print(user_obj)
-    return render(request, 'theme/index.html', {'user': user_obj})
+    if user_info:
+        user_obj = UserInfo.objects.filter(id=user_info['id']).first()
+        print(user_obj)
+        return render(request, 'theme/index.html', {'user': user_obj})
+    else:
+        return redirect('/stark/app_crm/userinfo/login/')
     pass
 
 def menu_permission_option(request):

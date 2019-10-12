@@ -27,4 +27,5 @@ urlpatterns = [
     path('index/', theme_views.index),
     # media 路由配置
     re_path(r'media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^$', theme_views.index),
 ]
