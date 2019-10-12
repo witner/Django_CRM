@@ -13,7 +13,7 @@ cd ${PROJECT_DIR}
 # 停止python web容器uwsgi
 if [[ -f scripts/uwsgi.pid ]]
 then
-  `uwsgi --stop ./scripts/uwsgi.pid`
+  `/usr/local/bin/uwsgi --stop ./scripts/uwsgi.pid`
 else
   PID=`/usr/sbin/lsof -i:5500|grep -v PID|awk '{print $2}'`
   if [[ "x${PID}" == "x" ]]

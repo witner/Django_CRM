@@ -10,6 +10,6 @@ PROJECT_DIR=${BASE_DIR}${PROJECT_NAME}
 cd ${PROJECT_DIR}
 
 # 启动python web容器uwsgi
-`uwsgi --ini ./configs/uWSGI.ini`
+`/usr/local/bin/uwsgi --ini ./configs/uWSGI.ini`
 # 重启nginx
 `/usr/local/nginx/sbin/nginx -s reload`
