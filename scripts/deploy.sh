@@ -1,6 +1,4 @@
-#!/bin/bash -il
-# 刷新环境变量
-source ~/.bashrc
+#!/bin/bash
 # 项目名称
 PROJECT_NAME=Django_CRM
 
