@@ -50,4 +50,4 @@ cd ${PROJECT_DIR} && tar -zxf ${PROJECT_PAGKAGE_NAME} && rm -f ${PROJECT_PAGKAGE
 #`pipenv --venv`
 
 # 将对于Nginx配置移动到对应目录
-cp ./configs/nginx.conf /etc/nginx/conf.d/${PROJECT_NAME}.conf
+cp ./configs/nginx.conf /usr/local/nginx/conf.d/${PROJECT_NAME}.conf
