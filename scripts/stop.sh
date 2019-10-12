@@ -14,4 +14,4 @@ PROJECT_DIR=${BASE_DIR}${PROJECT_NAME}
 cd ${PROJECT_DIR}
 
 # 停止python web容器uwsgi
-`uwsgi --stop script/uwsgi.pid`
+`uwsgi --stop ./scripts/uwsgi.pid`
